@@ -18,5 +18,29 @@ dados_excel <- dados_excel %>%
 docs <- Corpus(VectorSource(dados_excel$ementa))
 
 
-# Inspecting line 30
-as.character(docs[[2]])
+
+#remove potentially problematic symbols
+toSpace <- content_transformer(function(x, pattern) { return (gsub(pattern, " ", x))})
+docs <- tm_map(docs, toSpace, "-")
+docs <- tm_map(docs, toSpace, "'")
+docs <- tm_map(docs, toSpace, "`")
+docs <- tm_map(docs, toSpace, "\\.")
+docs <- tm_map(docs, toSpace, "º")
+docs <- tm_map(docs, toSpace, '"')
+docs <- tm_map(docs, toSpace, 'ª')
+
+#remove punctuation
+docs <- tm_map(docs, removePunctuation)
+#Strip digits
+docs <- tm_map(docs, removeNumbers)
+#remove stopwords
+
+docs <- tm_map(docs, removeWords, stopwords(“english”))
+#remove whitespace
+docs <- tm_map(docs, stripWhitespace)
+#Good practice to check every now and then
+
+
+dtm <- DocumentTermMatrix(docs)
+
+as.character(docs[[1]])
