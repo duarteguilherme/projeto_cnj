@@ -1,6 +1,6 @@
 library(readxl)
 
-dados_excel <- readRDS('dados_excel.rds')
+dados_excel <- readRDS('~/Documents/projeto_cnj/dados_excel.rds')
 
 library(tm)
 library(topicmodels)
@@ -13,7 +13,7 @@ dados_excel <- dados_excel %>%
   mutate(ementa = gsub("\n", "", ementa)) %>%
   mutate(ementa = gsub(" +", " ", ementa)) %>%
   mutate(ementa = iconv(to="ascii//translit", ementa))%>%
-  mutate(ementa = toupper(ementa))
+  mutate(ementa = tolower(ementa))
 
 docs <- Corpus(VectorSource(dados_excel$ementa))
 
@@ -41,7 +41,7 @@ docs <- tm_map(docs, stripWhitespace)
 #Good practice to check every now and then
 
 # Testing
-as.character(docs[[1]])
+as.character(docs[[2]])
 
 dtm <- DocumentTermMatrix(docs)
 
